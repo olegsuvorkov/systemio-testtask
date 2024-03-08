@@ -13,3 +13,21 @@ services:
         build: ./docker/app
         volumes:
             - .:/var/www
+        depends_on:
+            - db
+
+    ###> doctrine/doctrine-bundle ###
+    db:
+        image: postgres:${POSTGRES_VERSION:-16}-alpine
+        environment:
+            POSTGRES_DB: ${DB_NAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_USER: ${DB_USER}
+        volumes:
+            - database_data:/var/lib/postgresql/data:rw
+###< doctrine/doctrine-bundle ###
+
+volumes:
+###> doctrine/doctrine-bundle ###
+  database_data:
+###< doctrine/doctrine-bundle ###
