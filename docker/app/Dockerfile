@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine3.18
+FROM php:8.3-fpm-alpine3.19
 
 RUN set -eux; \
     apk add --no-cache \
@@ -20,6 +20,7 @@ RUN set -eux; \
       zip \
       intl \
       mbstring \
+      sysvsem \
  && apk del .dev
 
 RUN apk add --update --no-cache --virtual .build-dependencies ${PHPIZE_DEPS} linux-headers \

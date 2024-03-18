@@ -17,7 +17,17 @@ framework:
     #fragments: true
     php_errors:
         log: true
-
+    http_client:
+        scoped_clients:
+            api_layer.client:
+                base_uri: 'http://data.fixer.io/api/'
+                max_redirects: 10
+                max_duration: 0
+                http_version: 1.1
+                query:
+                    access_key: '%env(FIXER_ACCESS_KEY)%'
+                headers:
+                    'Content-Type': 'text/plain'
 when@test:
     framework:
         test: true
