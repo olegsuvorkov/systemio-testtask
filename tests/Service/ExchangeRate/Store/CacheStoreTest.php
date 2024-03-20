@@ -10,8 +10,11 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
+#[UsesClass(CacheStore::class)]
 class CacheStoreTest extends KernelTestCase
 {
     private StoreInterface $originalStore;
@@ -21,9 +24,11 @@ class CacheStoreTest extends KernelTestCase
     protected function setUp(): void
     {
         self::bootKernel();
+        /** @var ContainerInterface $container */
+        $container = self::getContainer();
         $this->originalStore = self::createMock(StoreInterface::class);
-        self::getContainer()->set(PgSqlDatabaseStore::class, $this->originalStore);
-        $this->store = self::getContainer()->get(CacheStore::class);
+        $container->set(PgSqlDatabaseStore::class, $this->originalStore);
+        $this->store = $container->get(CacheStore::class);
     }
 
     #[Test]

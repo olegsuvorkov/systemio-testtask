@@ -5,11 +5,12 @@ namespace App\Service\ExchangeRate\Client;
 use App\Service\ExchangeRate\Exception\ExchangeRateException;
 use DateTimeInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
  * Клиент для работы с сервисами курсов валют
  */
-#[Autoconfigure(public: true)]
+#[AutoconfigureTag('service.exchange_rate.client')]
 interface ClientInterface
 {
     /**

@@ -17,10 +17,25 @@ interface ExchangeRateServiceInterface
      * Получить курсы обмена валют за указанную дату
      *
      * @param string $from
-     * @param string[] $to
+     * @param string|string[] $to
      * @param DateTimeInterface $date
      * @return array<string, float>
      * @throws ExchangeRateException
      */
-    public function getRate(string $from, array $to, DateTimeInterface $date = new DateTimeImmutable()): array;
+    public function getRate(string $from, string|array $to, DateTimeInterface $date = new DateTimeImmutable()): array;
+
+    /**
+     * @param string $from
+     * @param string $to
+     * @param float $price
+     * @param DateTimeInterface $date
+     * @return float
+     * @throws ExchangeRateException
+     */
+    public function convert(
+        string $from,
+        string $to,
+        float $price,
+        DateTimeInterface $date = new DateTimeImmutable(),
+    ): float;
 }

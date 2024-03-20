@@ -16,8 +16,8 @@ use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-#[AsTaggedItem(priority: 10)]
-readonly class FixerClient implements ClientInterface
+#[AsTaggedItem(priority: 20)]
+readonly class OpenExchangeRatesClient implements ClientInterface
 {
     private const array SCHEMA = [
         'type' => 'object',
@@ -40,16 +40,10 @@ readonly class FixerClient implements ClientInterface
             [
                 'type' => 'object',
                 'properties' => [
-                    'error' => [
-                        'type' => "object",
-                        'properties' => [
-                            'code' => ['type' => 'integer'],
-                            'type' => ['type' => 'string'],
-                            'info' => ['type' => 'string'],
-                        ],
-                        'additionalProperties' => true,
-                        'required' => ['code'],
-                    ],
+                    'error' => ['type' => "boolean"],
+                    'status' => ['type' => "integer"],
+                    'message' => ['type' => "string"],
+                    'description' => ['type' => "string"],
                 ],
                 'additionalItems' => true,
                 'required' => ['error'],
@@ -58,7 +52,7 @@ readonly class FixerClient implements ClientInterface
     ];
 
     public function __construct(
-        #[Target('api_layer.client')]
+        #[Target('open_exchange_rates.client')]
         private HttpClientInterface $client,
     )
     {
@@ -69,11 +63,11 @@ readonly class FixerClient implements ClientInterface
      */
     public function getByDate(string $from, array $to, DateTimeInterface $date): array
     {
-        if ($from !== 'EUR') {
+        if ($from !== 'USD') {
             throw new ExchangeRateException();
         }
         $result = array_fill_keys($to, null);
-        $path = $this->isToday($date) ? 'latest' : $date->format('Y-m-d');
+        $path = $this->isToday($date) ? 'latest.json' : 'historical/'.$date->format('Y-m-d').'.json';
         try {
             $response = $this->client->request('GET', $path, ['query' => [
                 'base' => $from,
@@ -106,16 +100,16 @@ readonly class FixerClient implements ClientInterface
     private function fetchAndValidate(ResponseInterface $response, array $schema): array
     {
         $validator = new Validator();
-        $data = $response->toArray();
+        $data = $response->toArray(false);
         if ($validator->validate($data, $schema, Constraint::CHECK_MODE_TYPE_CAST)) {
             throw new ExchangeRateException(
                 json_encode($validator->getErrors()),
                 previous: new ClientException($response),
             );
         }
-        if ($error = $data['error'] ?? []) {
+        if ($data['error'] ?? false) {
             throw new ExchangeRateException(
-                sprintf('%s: %s', $error['type'] ?? '', $error['info'] ?? ''), $error['code'],
+                sprintf('%s: %s', $data['message'] ?? '', $data['description'] ?? ''), $data['status'] ?? 0,
                 new ClientException($response)
             );
         }

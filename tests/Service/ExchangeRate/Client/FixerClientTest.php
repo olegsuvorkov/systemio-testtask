@@ -7,11 +7,12 @@ use App\Service\ExchangeRate\Client\FixerClient;
 use App\Service\ExchangeRate\Exception\ExchangeRateException;
 use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\JsonMockResponse;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+#[UsesClass(FixerClient::class)]
 class FixerClientTest extends KernelTestCase
 {
     private MockHttpClient $client;

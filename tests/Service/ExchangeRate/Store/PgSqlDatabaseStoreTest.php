@@ -8,19 +8,22 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
+#[UsesClass(PgSqlDatabaseStore::class)]
 class PgSqlDatabaseStoreTest extends KernelTestCase
 {
     use DatabaseTestCaseTrait;
 
     private PgSqlDatabaseStore $store;
 
-    private DateTimeImmutable $now;
-
     protected function setUp(): void
     {
-        $this->store = self::getContainer()->get(PgSqlDatabaseStore::class);
+        /** @var ContainerInterface $container */
+        $container = self::getContainer();
+        $this->store = $container->get(PgSqlDatabaseStore::class);
         $this->store->clear();
     }
 
