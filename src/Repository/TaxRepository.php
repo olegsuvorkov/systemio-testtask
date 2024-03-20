@@ -21,6 +21,11 @@ class TaxRepository extends ServiceEntityRepository
         parent::__construct($registry, Tax::class);
     }
 
+    /**
+     * @param string $countryCode
+     * @param string $format
+     * @return Tax|null
+     */
     public function findByCountryCodeAndFormat(string $countryCode, string $format): ?Tax
     {
         return $this->findOneBy([

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Tax
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ORM\Column]
     public ?int $id = null;
 

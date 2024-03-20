@@ -16,5 +16,7 @@ framework:
 
         # Namespaced pools use the above "app" backend by default
         pools:
+            tax.cache:
+                adapter: cache.adapter.array
             exchange_rate.cache:
                 adapter: cache.adapter.array
