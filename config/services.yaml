@@ -22,3 +22,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    systemeio.payment_processor.paypal:
+        class: Systemeio\TestForCandidates\PaymentProcessor\PaypalPaymentProcessor
+
+    systemeio.payment_processor.stripe:
+        class: Systemeio\TestForCandidates\PaymentProcessor\StripePaymentProcessor
