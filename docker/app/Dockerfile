@@ -30,6 +30,9 @@ RUN apk add --update --no-cache --virtual .build-dependencies ${PHPIZE_DEPS} lin
  && pecl clear-cache \
  && apk del .build-dependencies
 
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+RUN chmod a+rwx /usr/bin/composer
+
 RUN rm -rf /var/www/*
 
 WORKDIR /var/www

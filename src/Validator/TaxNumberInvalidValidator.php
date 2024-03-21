@@ -17,7 +17,10 @@ class TaxNumberInvalidValidator extends ConstraintValidator
     public function validate(mixed $value, Constraint $constraint): void
     {
         /* @var TaxNumberInvalid $constraint */
-        if (null !== $value && !$this->taxRule->checkNumber($value)) {
+        if (null === $value || $value === '') {
+            return;
+        }
+        if (!$this->taxRule->checkNumber($value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();
