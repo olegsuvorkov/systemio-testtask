@@ -81,7 +81,11 @@ readonly class ExchangeRateService implements ExchangeRateServiceInterface
         DateTimeInterface $date = new DateTimeImmutable(),
     ): float
     {
-        $rate = $this->getRate($from, [$to], $date)[$to];
+        if ($from !== $to) {
+            $rate = $this->getRate($from, [$to], $date)[$to];
+        } else {
+            $rate = 1.0;
+        }
         return $price * $rate;
     }
 

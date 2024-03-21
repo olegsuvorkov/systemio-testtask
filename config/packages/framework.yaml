@@ -5,7 +5,6 @@ framework:
     annotations: false
     http_method_override: false
     handle_all_throwables: true
-
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
     # Remove or comment this section to explicitly disable session support.
     session:
@@ -26,8 +25,13 @@ framework:
                 http_version: 1.1
                 query:
                     access_key: '%env(FIXER_ACCESS_KEY)%'
-                headers:
-                    'Content-Type': 'text/plain'
+            open_exchange_rates.client:
+                base_uri: 'https://openexchangerates.org/api/'
+                max_redirects: 10
+                max_duration: 0
+                http_version: 1.1
+                query:
+                    app_id: '%env(OPENEXCHANGERATES_ACCESS_KEY)%'
 when@test:
     framework:
         test: true

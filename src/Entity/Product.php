@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Product
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ORM\Column]
     public ?int $id = null;
 
@@ -26,4 +26,14 @@ class Product
         'fixed' => true,
     ])]
     public string $currency = '';
+
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
 }

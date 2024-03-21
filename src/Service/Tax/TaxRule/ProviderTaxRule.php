@@ -27,10 +27,7 @@ readonly class ProviderTaxRule implements TaxRuleInterface
     }
 
     /**
-     * @param string $number
-     * @param float $price
-     * @return float
-     * @throws InvalidTaxNumberException
+     * @inheritDoc
      */
     public function calculatePrice(string $number, float $price): float
     {

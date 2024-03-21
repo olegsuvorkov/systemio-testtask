@@ -14,4 +14,9 @@ class CouponFixed extends Coupon
         'fixed' => true,
     ])]
     public string $currency = '';
+
+    public function getType(): string
+    {
+        return 'discount_fixed';
+    }
 }

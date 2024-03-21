@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class Coupon
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue('SEQUENCE')]
     #[ORM\Column]
     public ?int $id = null;
 
@@ -26,4 +26,6 @@ abstract class Coupon
     )
     {
     }
+
+    public abstract function getType(): string;
 }

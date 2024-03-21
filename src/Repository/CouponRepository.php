@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Coupon;
+use App\Service\PriceBuilder\CouponProviderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 
 /**
  * @extends ServiceEntityRepository<Coupon>
@@ -14,10 +17,16 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Coupon[]    findAll()
  * @method Coupon[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CouponRepository extends ServiceEntityRepository
+#[AsAlias(CouponProviderInterface::class)]
+class CouponRepository extends ServiceEntityRepository implements CouponProviderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Coupon::class);
+    }
+
+    public function getCoupon(string $code): Coupon
+    {
+        return $this->findOneBy(['code' => $code]) ?? throw new NoResultException();
     }
 }

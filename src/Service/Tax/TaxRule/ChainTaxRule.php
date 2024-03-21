@@ -29,6 +29,9 @@ readonly class ChainTaxRule implements TaxRuleInterface
         return false;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function calculatePrice(string $number, float $price): float
     {
         foreach ($this->rules as $rule) {
